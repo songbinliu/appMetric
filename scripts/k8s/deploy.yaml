@@ -23,11 +23,11 @@ spec:
         app: appmetric
     spec:
       containers:
-      - image: docker.io/beekman9527/appmetric
-        imagePullPolicy: IfNotPresent
+      - image: docker.io/beekman9527/appmetric:latest
+        imagePullPolicy: Always
         name: appmetric
         args:
-        - --promUrl=http://promethesu.istio-system:9090
+        - --promUrl=http://prometheus.istio-system:9090
         - --v=3
         ports:
         - containerPort: 8081
