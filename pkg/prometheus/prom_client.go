@@ -38,7 +38,7 @@ const (
 
 type MetricRestClient struct {
 	client *http.Client
-	host     string
+	host   string
 }
 
 func NewRestClient(host string) (*MetricRestClient, error) {
@@ -63,8 +63,8 @@ func NewRestClient(host string) (*MetricRestClient, error) {
 	glog.V(2).Infof("Prometheus server address is: %v", host)
 
 	return &MetricRestClient{
-		client:   client,
-		host:     host,
+		client: client,
+		host:   host,
 	}, nil
 }
 

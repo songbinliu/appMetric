@@ -2,8 +2,8 @@ package server
 
 import (
 	"bytes"
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"github.com/golang/glog"
 	"html/template"
 	"io"

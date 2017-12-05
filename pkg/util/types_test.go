@@ -1,8 +1,8 @@
 package util
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"testing"
 )
 

@@ -1,8 +1,8 @@
 package util
 
 import (
-	"fmt"
 	"bytes"
+	"fmt"
 )
 
 type ObjectMetric struct {

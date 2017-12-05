@@ -3,13 +3,13 @@ SOURCE_DIRS = cmd pkg
 PACKAGES := go list ./... | grep -v /vendor | grep -v /out
 
 bin=appMetric
-product: clean
+product: fmtcheck vet
 	env GOOS=linux GOARCH=amd64 go build -o ${OUTPUT_DIR}/${bin}.linux ./cmd
 
-build: clean
+build: fmtcheck vet
 	go build -o ${OUTPUT_DIR}/${bin} ./cmd
 
-test: clean
+test: fmtcheck vet
 	@go test -v -race ./pkg/...
 
 .PHONY: fmtcheck

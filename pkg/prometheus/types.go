@@ -29,8 +29,8 @@ type TurboLatencyMetric struct {
 */
 
 type TurboLatencyMetric struct {
-	DestinationUID     string `json:"destination_uid,omitempty"`
-	ResponseCode       string `json:"response_code,omitempty"`
+	DestinationUID string `json:"destination_uid,omitempty"`
+	ResponseCode   string `json:"response_code,omitempty"`
 }
 
 type TurboLatency struct {

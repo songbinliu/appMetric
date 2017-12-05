@@ -10,7 +10,7 @@ import (
 
 var (
 	prometheusHost string
-	port int
+	port           int
 )
 
 func parseFlags() {
