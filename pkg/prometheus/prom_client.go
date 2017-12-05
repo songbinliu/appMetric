@@ -224,6 +224,7 @@ func (c *MetricRestClient) GetPodMetrics() (util.MetricSet, error) {
 		result[newKey] = v
 	}
 
+	glog.V(3).Infof("Pod metrics:\n%v", result.String())
 	glog.V(2).Infof("Get %d pod metrics in the end", len(result))
 	return result, nil
 }
@@ -264,6 +265,7 @@ func (c *MetricRestClient) GetServiceMetrics() (util.MetricSet, error) {
 		result[newKey] = v
 	}
 
+	glog.V(3).Infof("Service metrics:\n%v", result.String())
 	glog.V(2).Infof("Get %d service metrics in the end", len(result))
 	return result, nil
 }
@@ -300,7 +302,7 @@ func (c *MetricRestClient) GetLatency(exp string, mset util.MetricSet) error {
 
 		uid := resp[i].Metric.DestinationUID
 		mset.AddorSetResponeTime(uid, value)
-		glog.V(3).Infof("[%d] latency=%.5f, uid=%v", i, value, uid)
+		glog.V(4).Infof("[%d] latency=%.5f, uid=%v", i, value, uid)
 	}
 
 	return nil
@@ -337,7 +339,7 @@ func (c *MetricRestClient) GetRPS(exp string, mset util.MetricSet) error {
 
 		uid := resp[i].Metric.DestinationUID
 		mset.AddorSetRPS(uid, value)
-		glog.V(3).Infof("[%d] requestPerSecond=%.5f, uid=%v", i, value, uid)
+		glog.V(4).Infof("[%d] requestPerSecond=%.5f, uid=%v", i, value, uid)
 	}
 
 	return nil
