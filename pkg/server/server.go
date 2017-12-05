@@ -52,7 +52,7 @@ func (s *MetricServer) Run() {
 
 func (s *MetricServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
-	glog.V(3).Infof("Begin to handle path: %v", path)
+	glog.V(2).Infof("Begin to handle path: %v", path)
 
 	if strings.EqualFold(path, "/favicon.ico") {
 		s.faviconHandler(w, r)
