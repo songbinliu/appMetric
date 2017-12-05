@@ -9,17 +9,13 @@ import (
 )
 
 var (
-	host     string
-	user     string
-	password string
+	prometheusHost string
 	port int
 )
 
 func parseFlags() {
 	flag.Set("logtostderr", "true")
-	flag.StringVar(&host, "host", "http://localhost:9090", "the address of prometheus server")
-	flag.StringVar(&user, "user", "admin", "username to login to prometheus")
-	flag.StringVar(&password, "pass", "admin", "password to login to prometheus")
+	flag.StringVar(&prometheusHost, "promUrl", "http://localhost:9090", "the address of prometheus server")
 	flag.IntVar(&port, "port", 8081, "port to expose metrics")
 	flag.Parse()
 }
@@ -49,7 +45,7 @@ func test_prometheus(mclient *prometheus.MetricRestClient) {
 
 func main() {
 	parseFlags()
-	mclient, err := prometheus.NewRestClient(host, user, password)
+	mclient, err := prometheus.NewRestClient(prometheusHost)
 	if err != nil {
 		glog.Fatal("Failed to generate client: %v", err)
 	}

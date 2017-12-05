@@ -38,13 +38,10 @@ const (
 
 type MetricRestClient struct {
 	client *http.Client
-
 	host     string
-	username string
-	password string
 }
 
-func NewRestClient(host, uname, pass string) (*MetricRestClient, error) {
+func NewRestClient(host string) (*MetricRestClient, error) {
 	//1. get http client
 	client := &http.Client{
 		Timeout: defaultTimeOut,
@@ -68,8 +65,6 @@ func NewRestClient(host, uname, pass string) (*MetricRestClient, error) {
 	return &MetricRestClient{
 		client:   client,
 		host:     host,
-		username: uname,
-		password: pass,
 	}, nil
 }
 
