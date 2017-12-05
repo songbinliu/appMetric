@@ -3,13 +3,13 @@ package server
 import (
 	"bytes"
 	"fmt"
+	"encoding/json"
 	"github.com/golang/glog"
 	"html/template"
 	"io"
 	"net/http"
 
 	"appMetric/pkg/util"
-	"k8s.io/kubernetes/staging/src/k8s.io/apimachinery/pkg/util/json"
 )
 
 var (

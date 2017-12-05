@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"k8s.io/kubernetes/staging/src/k8s.io/apimachinery/pkg/util/json"
+	"encoding/json"
 	"testing"
 )
 
