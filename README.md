@@ -65,7 +65,7 @@ curl http://localhost:8081/service/metrics
 {"default/details":{"response_time":13.135999999995173,"req_per_second":0.06285714285714285},"default/inception-be-pods":{"response_time":953.5242727268435,"req_per_second":0.06285714285714285},"default/productpage":{"response_time":76.38181818180617,"req_per_second":0.06285714285714285},"default/ratings":{"response_time":8.805875000001961,"req_per_second":0.04571428571428571},"default/reviews":{"response_time":28.504636363632844,"req_per_second":0.06285714285714285},"default/video":{"response_time":111.38272727271216,"req_per_second":0.06285714285714285}}
 ```
 
-Alternately, this REST API service can also deployed in Kubernetes:
+Alternately, this REST API service can also be deployed in Kubernetes:
 ```console
 kubectl create -f scripts/k8s/deploy.yaml
 
