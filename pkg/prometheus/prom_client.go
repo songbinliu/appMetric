@@ -337,6 +337,9 @@ func (c *MetricRestClient) GetRPS(exp string, mset util.MetricSet) error {
 			continue
 		}
 
+		// convert it from seconds to milliseconds;
+		value = value * 1000.0
+
 		uid := resp[i].Metric.DestinationUID
 		mset.AddorSetRPS(uid, value)
 		glog.V(4).Infof("[%d] requestPerSecond=%.5f, uid=%v", i, value, uid)
