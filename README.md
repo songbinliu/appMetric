@@ -1,5 +1,5 @@
 # appMetric
-Get [Kubernestes](https://kubernetes.io) service and pod `latency` and `request-per-seconds` from [Istio](https://istio.io).
+Get [Kubernestes](https://kubernetes.io) service and pod `latency` and `request-per-seconds` metrics from [Istio](https://istio.io).
 
 # Kubernetes service latency and request-per-second
 format: <namespace/svcName>: {"response_time": <ms>, "req_per_second": <rps>}
