@@ -45,7 +45,9 @@ Isito metrics, handlers and rules are defined in [script](https://github.com/son
 istioctl create -f scripts/istio/turbo.metric.yaml
 ```
 **Four Metrics**: pod latency, pod request count, service latency and service request count.
+
 **One Handler**: a `Prometheus handler]` to consume the four metrics, and generate metrics in [Prometheus](https://prometheus.io) format. This server will provide REST API to get the metrics from Prometheus.
+
 **One Rule**: Only the `http` based metrics will be handled by the defined handler.
 
 ## Run REST API Server
