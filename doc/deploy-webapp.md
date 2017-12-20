@@ -1,7 +1,7 @@
 We will show how to deploy a web service in kubernetes, and get its response time and request counts with `appMetric`.
 
 ## 1. Simple Web Service
-Here is the yaml file for the demo web service.
+Here is the yaml file(*music.yaml*) for the demo web service.
 
 * Make sure the port name in the service is `http`. 
 
