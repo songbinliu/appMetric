@@ -37,7 +37,7 @@ format: <namespace/svcName>: {"response_time": <ms>, "req_per_second": <rps>}
 
 ## Prerequisites
 * Kubernetes 1.7.3 +
-* Istio 0.2.12 +
+* Istio 0.3 + (with Prometheus addon)
 
 ## Deploy metrics and rules in Istio
 Isito metrics, handlers and rules are defined in [script](https://github.com/songbinliu/appMetric/blob/master/scripts/istio/turbo.metric.yaml), deploy it with:
