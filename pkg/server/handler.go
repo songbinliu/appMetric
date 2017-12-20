@@ -18,7 +18,21 @@ var (
 	<link rel="icon" type="image/jpg" href="data:;base64,iVBORw0KGgo">
 	</head><boday><center>
 	<h1>{{.PageHead}}</h1>
+	This is a web server to serve Application latency and request-count-per-second.
 	<hr width="50%">
+	`
+
+	htmlWelcomeTemplate string = `
+
+	<p>
+	<table style="font-size:18px">
+	<tr><td><a href="/index.html"> welcome Page </a></td><td> this page </td></tr>
+	<tr><td><a href="{{.PodPath}}"> Pod metrics </a></td><td> response-time: ms, request-count</td></tr>
+	<tr><td><a href="{{.ServicePath}}"> Service metrics </a></td><td> response-time: ms, request-count</td></tr>
+	</table>
+	</p>
+
+	Incoming path is: {{.IncomePath}}
 	`
 
 	htmlFootTemplate string = `
@@ -50,18 +64,41 @@ func getHead(title string, head string) (string, error) {
 	return result.String(), nil
 }
 
-// handle pages "/", "/index.html", "index.htm"
-func (s *MetricServer) handleWelcome(path string, w http.ResponseWriter, r *http.Request) {
-	head, err := getHead("Welcome", "Introduction")
+func genWelcomePage(path string) (string, error) {
+	//1. get body
+	tmp, err := template.New("body").Parse(htmlWelcomeTemplate)
 	if err != nil {
-		glog.Errorf("Failed to handle welcome page.")
-		io.WriteString(w, "Internal Error")
-		return
+		glog.Errorf("Failed to parse image template %v:%v", htmlWelcomeTemplate, err)
+		return "", err
 	}
 
-	body := fmt.Sprintf("This is a web server to server Application latency and request-per-second.<br/> path: %s",
-		path)
+	var body bytes.Buffer
+	data := map[string]string{"IncomePath": path, "PodPath": podMetricPath, "ServicePath": serviceMetricPath}
+	if err = tmp.Execute(&body, data); err != nil {
+		glog.Errorf("Failed to execute template: %v", err)
+		return "", err
+	}
 
+	return body.String(), nil
+}
+
+// handle pages "/", "/index.html", "index.htm"
+func (s *MetricServer) handleWelcome(path string, w http.ResponseWriter, r *http.Request) {
+	//1. head
+	head, err := getHead("Welcome", "Introduction")
+	if err != nil {
+		glog.Errorf("Failed to generate html head.")
+		head = "empty head"
+	}
+
+	//2. body
+	body, err := genWelcomePage(path)
+	if err != nil {
+		glog.Errorf("Failed to generate html body.")
+		body = "empty body"
+	}
+
+	//3. foot
 	foot := s.genPageFoot(r)
 
 	io.WriteString(w, head+body+foot)

@@ -22,13 +22,14 @@ const (
 
 	defaultTimeOut = time.Duration(60 * time.Second)
 
-	TURBO_SVC_LATENCY_SUM   = "turbo_service_latency_time_ms_sum"
-	TURBO_SVC_LATENCY_COUNT = "turbo_service_latency_time_ms_count"
-	TURBO_SVC_REQUEST_COUNT = "turbo_service_request_count"
+	// NOTO: for istio 2.x, the prefix "istio_" should be removed
+	TURBO_SVC_LATENCY_SUM   = "istio_turbo_service_latency_time_ms_sum"
+	TURBO_SVC_LATENCY_COUNT = "istio_turbo_service_latency_time_ms_count"
+	TURBO_SVC_REQUEST_COUNT = "istio_turbo_service_request_count"
 
-	TURBO_POD_LATENCY_SUM   = "turbo_pod_latency_time_ms_sum"
-	TURBO_POD_LATENCY_COUNT = "turbo_pod_latency_time_ms_count"
-	TURBO_POD_REQUEST_COUNT = "turbo_pod_request_count"
+	TURBO_POD_LATENCY_SUM   = "istio_turbo_pod_latency_time_ms_sum"
+	TURBO_POD_LATENCY_COUNT = "istio_turbo_pod_latency_time_ms_count"
+	TURBO_POD_REQUEST_COUNT = "istio_turbo_pod_request_count"
 
 	TURBO_LATENCY_DURATION = "3m"
 

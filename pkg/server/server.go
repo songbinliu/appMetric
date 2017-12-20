@@ -18,6 +18,11 @@ type MetricServer struct {
 	promClient *prometheus.MetricRestClient
 }
 
+const (
+	podMetricPath     = "/pod/metrics"
+	serviceMetricPath = "/service/metrics"
+)
+
 func NewMetricServer(port int, pclient *prometheus.MetricRestClient) *MetricServer {
 	ip, err := util.ExternalIP()
 	if err != nil {
@@ -59,12 +64,12 @@ func (s *MetricServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.EqualFold(path, "/pod/metrics") {
+	if strings.EqualFold(path, podMetricPath) {
 		s.handlePodMetric(w, r)
 		return
 	}
 
-	if strings.EqualFold(path, "/service/metrics") {
+	if strings.EqualFold(path, serviceMetricPath) {
 		s.handleServiceMetric(w, r)
 		return
 	}
