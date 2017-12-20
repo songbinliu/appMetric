@@ -32,7 +32,6 @@ spec:
     metadata:
       labels:
         app: "music-app-pods"
-        purpose: "service-test"
     spec:
       containers:
       - name: "web-app"
@@ -45,3 +44,52 @@ spec:
         ports: 
         - containerPort: 8080
 ```
+
+## 2. Deploy the service with the injected sidecar container
+Inject the sidecar container, and deploy the demo service in Kubernetes.
+```console
+kubectl apply -f <(istioctl kube-inject -f musice.yaml)
+```
+
+## 3. Access the service
+One convenient way to access the service is to access the service from a container in the same Kubernetes cluster:
+```yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: curl
+spec:
+  replicas: 1
+  selector:
+    app: "curl-pods"
+  template:
+    metadata:
+      labels:
+        app: "curl-pods"
+    spec:
+      containers:
+      - name: "sleep"
+        image: beekman9527/curl:latest
+        args:
+          - --v=2
+        resources:
+          limits:
+            cpu: "10m"
+          requests:
+            cpu: "2m"
+```
+
+Deploy this rc directly (without sidecar injection), and login to the container:
+```console
+kubectl exec -it curl-bd6kd /bin/bash
+
+## in the container, access appmetric service, and the simple service by:
+$ curl appmetric.default:8081/pod/metrics
+$ curl music-service.default:8080
+```
+
+
+
+
+
+## 4. Check the metrics
