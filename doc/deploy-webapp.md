@@ -84,12 +84,17 @@ Deploy this rc directly (without sidecar injection), and login to the container:
 kubectl exec -it curl-bd6kd /bin/bash
 
 ## in the container, access appmetric service, and the simple service by:
-$ curl appmetric.default:8081/pod/metrics
 $ curl music-service.default:8080
+$ curl appmetric.default:8081/pod/metrics
+$ curl appmetric.default:8081/service/metrics
 ```
 
 
-
-
-
 ## 4. Check the metrics
+The result of `curl appmetric.default:8081/service/metrics`  will be something like:
+```json
+{"default/music-app-rd52s":
+    {"response_time":215.59182417582406,
+    "req_per_second":0.52}
+}
+```
