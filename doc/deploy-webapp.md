@@ -91,7 +91,7 @@ $ curl appmetric.default:8081/service/metrics
 
 
 ## 4. Check the metrics
-The result of `curl appmetric.default:8081/service/metrics`  will be something like:
+The result of `curl appmetric.default:8081/pod/metrics`  will be something like:
 ```json
 {"default/music-app-rd52s":
     {"response_time":215.59182417582406,
