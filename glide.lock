@@ -1,5 +1,5 @@
-hash: e3a80a28145bd5d6c0279cfff7ebd7b3463f798541154cc215684ca382421097
-updated: 2018-04-17T13:48:51.738747-04:00
+hash: 635d53e919571c47b45ba2eae447a3aea01843955020d45add48d7a23c3d8652
+updated: 2018-04-17T18:18:01.241321-04:00
 imports:
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
@@ -8,7 +8,7 @@ imports:
   subpackages:
   - model
 - name: github.com/songbinliu/client_prometheus
-  version: 069e972ac1534b691e1dab4b66ae7ce370e90da7
+  version: 118d5ef7a0c31fe0a076587f97720b7cd55f50ff
   subpackages:
   - pkg/prometheus
 testImports: []
