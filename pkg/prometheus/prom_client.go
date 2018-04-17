@@ -9,7 +9,6 @@ import (
 	"math"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	"appMetric/pkg/util"
@@ -97,6 +96,7 @@ func (c *MetricRestClient) GetJobs() (string, error) {
 	return string(result), nil
 }
 
+/*
 func getLatencyExp(pod bool) string {
 	name_sum := ""
 	name_count := ""
@@ -187,7 +187,7 @@ func convertSVCUID(uid string) (string, error) {
 
 	nid := fmt.Sprintf("%s/%s", items[1], items[0])
 	return nid, nil
-}
+}*/
 
 func (c *MetricRestClient) GetPodMetrics() (util.MetricSet, error) {
 	mset := util.NewMetricSet()

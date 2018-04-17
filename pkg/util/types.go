@@ -7,14 +7,16 @@ import (
 
 type EntityMetric struct {
 	UID     string             `json:"uid,omitempty"`
+	Type    int32              `json:"type,omitempty"`
 	Labels  map[string]string  `json:"labels,omitempty"`
 	Metrics map[string]float64 `json:"metrics,omitempty"`
 }
 
-func NewEntityMetric(id string) *EntityMetric{
+func NewEntityMetric(id string, t int32) *EntityMetric {
 	m := &EntityMetric{
-		UID: id,
-		Labels: make(map[string]string),
+		UID:     id,
+		Type:    t,
+		Labels:  make(map[string]string),
 		Metrics: make(map[string]float64),
 	}
 
@@ -30,16 +32,16 @@ func (e *EntityMetric) SetMetric(name string, value float64) {
 }
 
 type MetricResponse struct {
-	Status int `json:"status"`
-	Message string `json:"message:omitemtpy"`
-	Data []*EntityMetric `json:"data:omitempty"`
+	Status  int             `json:"status"`
+	Message string          `json:"message:omitemtpy"`
+	Data    []*EntityMetric `json:"data:omitempty"`
 }
 
 func NewMetricResponse() *MetricResponse {
 	return &MetricResponse{
-		Status: 0,
+		Status:  0,
 		Message: "",
-		Data: []*EntityMetric{},
+		Data:    []*EntityMetric{},
 	}
 }
 
