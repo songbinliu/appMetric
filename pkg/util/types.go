@@ -1,10 +1,5 @@
 package util
 
-import (
-	"bytes"
-	"fmt"
-)
-
 type EntityMetric struct {
 	UID     string             `json:"uid,omitempty"`
 	Type    int32              `json:"type,omitempty"`
@@ -48,6 +43,10 @@ func NewMetricResponse() *MetricResponse {
 func (r *MetricResponse) SetStatus(v int, msg string) {
 	r.Status = v
 	r.Message = msg
+}
+
+func (r *MetricResponse) SetMetrics(dat []*EntityMetric) {
+	r.Data = dat
 }
 
 func (r *MetricResponse) AddMetric(m *EntityMetric) {

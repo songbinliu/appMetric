@@ -4,8 +4,9 @@ import (
 	"flag"
 	"github.com/golang/glog"
 
-	"appMetric/pkg/prometheus"
+	myp "appMetric/pkg/prometheus"
 	"appMetric/pkg/server"
+	"github.com/songbinliu/client_prometheus/pkg/prometheus"
 )
 
 var (
@@ -20,7 +21,7 @@ func parseFlags() {
 	flag.Parse()
 }
 
-func getJobs(mclient *prometheus.MetricRestClient) {
+func getJobs(mclient *prometheus.RestClient) {
 	msg, err := mclient.GetJobs()
 	if err != nil {
 		glog.Errorf("Failed to get jobs: %v", err)
@@ -29,29 +30,33 @@ func getJobs(mclient *prometheus.MetricRestClient) {
 	glog.V(1).Infof("jobs: %v", msg)
 }
 
-func test_prometheus(mclient *prometheus.MetricRestClient) {
+func test_prometheus(mclient *prometheus.RestClient) {
 	glog.V(2).Infof("Begin to test prometheus client...")
 	getJobs(mclient)
-	mset, err := mclient.GetPodMetrics()
-	if err != nil {
-		glog.Errorf("Failed to get pod metrics: %v", err)
-		return
-	}
-
-	glog.V(2).Infof("%v", mset.String())
 	glog.V(2).Infof("End of testing prometheus client.")
 	return
 }
 
 func main() {
 	parseFlags()
-	mclient, err := prometheus.NewRestClient(prometheusHost)
+	pclient, err := prometheus.NewRestClient(prometheusHost)
 	if err != nil {
 		glog.Fatal("Failed to generate client: %v", err)
 	}
-	test_prometheus(mclient)
+	//mclient.SetUser("", "")
+	test_prometheus(pclient)
 
-	s := server.NewMetricServer(port, mclient)
+	appGetter := myp.NewIstioEntityGetter("istio.app.metric")
+	appGetter.SetType(false)
+	appClient := myp.NewAggregator(pclient)
+	appClient.AddGetter(appGetter)
+
+	vappGetter := myp.NewIstioEntityGetter("istio.vapp.metric")
+	vappGetter.SetType(true)
+	vappClient := myp.NewAggregator(pclient)
+	vappClient.AddGetter(vappGetter)
+
+	s := server.NewMetricServer(port, appClient, vappClient)
 	s.Run()
 	return
 }
