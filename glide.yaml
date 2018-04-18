@@ -2,5 +2,5 @@ package: appMetric
 import:
 - package: github.com/prometheus/common/model
   version: 2e54d0b93cba2fd133edc32211dcc32c06ef72ca
-- package: github.com/songbinliu/xfire
+- package: github.com/songbinliu/xfire/pkg/prometheus
   version: 7040a79a5b11be249696e8e85ebc92e9e4bdd931
