@@ -1,7 +1,7 @@
 package prometheus
 
 import (
-	"appMetric/pkg/util"
+	"appMetric/pkg/inter"
 	"bytes"
 	"fmt"
 	"github.com/golang/glog"
@@ -68,8 +68,8 @@ func (istio *IstioEntityGetter) Category() string {
 	return "Istio.VirtualApplication"
 }
 
-func (istio *IstioEntityGetter) GetEntityMetric(client *pclient.RestClient) ([]*util.EntityMetric, error) {
-	result := []*util.EntityMetric{}
+func (istio *IstioEntityGetter) GetEntityMetric(client *pclient.RestClient) ([]*inter.EntityMetric, error) {
+	result := []*inter.EntityMetric{}
 
 	if istio.etype == podType {
 		istio.query.SetQueryType(podTPS)
@@ -100,7 +100,7 @@ func (istio *IstioEntityGetter) GetEntityMetric(client *pclient.RestClient) ([]*
 	return result, nil
 }
 
-func (istio *IstioEntityGetter) assignMetric(entity *util.EntityMetric, metric *IstioMetricData) {
+func (istio *IstioEntityGetter) assignMetric(entity *inter.EntityMetric, metric *IstioMetricData) {
 	for k, v := range metric.Labels {
 		entity.SetLabel(k, v)
 	}
@@ -109,12 +109,12 @@ func (istio *IstioEntityGetter) assignMetric(entity *util.EntityMetric, metric *
 	entity.SetLabel("metric.category", istio.Category())
 }
 
-func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.MetricData) []*util.EntityMetric {
-	result := []*util.EntityMetric{}
-	midresult := make(map[string]*util.EntityMetric)
-	etype := util.ApplicationType
+func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.MetricData) []*inter.EntityMetric {
+	result := []*inter.EntityMetric{}
+	midresult := make(map[string]*inter.EntityMetric)
+	etype := inter.ApplicationType
 	if istio.etype == svcType {
-		etype = util.VirtualApplicationType
+		etype = inter.VirtualApplicationType
 	}
 
 	for _, dat := range tpsDat {
@@ -124,10 +124,10 @@ func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.
 			continue
 		}
 
-		entity := util.NewEntityMetric(tps.uuid, etype)
+		entity := inter.NewEntityMetric(tps.uuid, etype)
 
 		istio.assignMetric(entity, tps)
-		entity.SetMetric(util.TPS, tps.GetValue())
+		entity.SetMetric(inter.TPS, tps.GetValue())
 		midresult[entity.UID] = entity
 		glog.V(5).Infof("uid=%v,uid2=%v, %+v", entity.UID, tps.uuid, entity)
 	}
@@ -142,11 +142,11 @@ func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.
 		entity, exist := midresult[latency.uuid]
 		if !exist {
 			glog.V(3).Infof("Some entity does not have TPS metric: %+v", latency)
-			entity = util.NewEntityMetric(latency.uuid, etype)
+			entity = inter.NewEntityMetric(latency.uuid, etype)
 			midresult[entity.UID] = entity
 			istio.assignMetric(entity, latency)
 		}
-		entity.SetMetric(util.Latency, latency.GetValue())
+		entity.SetMetric(inter.Latency, latency.GetValue())
 		glog.V(5).Infof("uid=%v, %+v", entity.UID, entity)
 	}
 
@@ -267,7 +267,7 @@ func (d *IstioMetricData) Parse(m *pclient.RawMetric) error {
 		glog.Errorf("Failed to parse UID(%v): %v", v, err)
 		return err
 	}
-	d.Labels[util.Name] = uid
+	d.Labels[inter.Name] = uid
 	d.uuid = uid
 
 	//2. ip
@@ -282,7 +282,7 @@ func (d *IstioMetricData) Parse(m *pclient.RawMetric) error {
 		glog.Errorf("Failed to parse IP(%v): %v", v, err)
 		return nil
 	}
-	d.Labels[util.IP] = ip
+	d.Labels[inter.IP] = ip
 
 	//NOTO: set uuid to its IP if available
 	d.uuid = ip

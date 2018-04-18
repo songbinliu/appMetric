@@ -1,4 +1,4 @@
-package util
+package inter
 
 import (
 	"encoding/json"

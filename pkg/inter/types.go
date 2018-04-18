@@ -1,4 +1,4 @@
-package util
+package inter
 
 type EntityMetric struct {
 	UID     string             `json:"uid,omitempty"`

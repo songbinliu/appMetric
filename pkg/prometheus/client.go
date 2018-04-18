@@ -1,13 +1,14 @@
 package prometheus
 
 import (
-	"appMetric/pkg/util"
 	"github.com/golang/glog"
+
+	"appMetric/pkg/inter"
 	"github.com/songbinliu/xfire/pkg/prometheus"
 )
 
 type EntityMetricGetter interface {
-	GetEntityMetric(client *prometheus.RestClient) ([]*util.EntityMetric, error)
+	GetEntityMetric(client *prometheus.RestClient) ([]*inter.EntityMetric, error)
 	Name() string
 	Category() string
 }
@@ -37,8 +38,8 @@ func (c *Aggregator) AddGetter(getter EntityMetricGetter) bool {
 	return true
 }
 
-func (c *Aggregator) GetEntityMetrics() ([]*util.EntityMetric, error) {
-	result := []*util.EntityMetric{}
+func (c *Aggregator) GetEntityMetrics() ([]*inter.EntityMetric, error) {
+	result := []*inter.EntityMetric{}
 	for _, getter := range c.Getters {
 		dat, err := getter.GetEntityMetric(c.pclient)
 		if err != nil {
