@@ -1,7 +1,7 @@
 package addon
 
 import (
-	alligator "appMetric/pkg/prometheus"
+	"appMetric/pkg/alligator"
 	"fmt"
 )
 
@@ -23,11 +23,11 @@ func (f *GetterFactory) CreateEntityGetter(category, name string) (alligator.Ent
 	case RedisGetterCategory:
 		return NewRedisEntityGetter(name), nil
 	case IstioGetterCategory:
-		g := NewIstioEntityGetter(name)
+		g := newIstioEntityGetter(name)
 		g.SetType(false)
 		return g, nil
 	case IstioVAppGetterCategory:
-		g := NewIstioEntityGetter(name)
+		g := newIstioEntityGetter(name)
 		g.SetType(true)
 		return g, nil
 	}

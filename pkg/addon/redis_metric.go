@@ -24,7 +24,7 @@ type RedisEntityGetter struct {
 func NewRedisEntityGetter(name string) *RedisEntityGetter {
 	return &RedisEntityGetter{
 		name:  name,
-		query: NewRedisQuery(),
+		query: newRedisQuery(),
 	}
 }
 
@@ -130,7 +130,7 @@ type redisQuery struct {
 	queryMap map[int]string
 }
 
-func NewRedisQuery() *redisQuery {
+func newRedisQuery() *redisQuery {
 	q := &redisQuery{
 		qtype:    0,
 		queryMap: make(map[int]string),

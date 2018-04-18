@@ -10,16 +10,16 @@ import (
 func TestTypeAssertion(t *testing.T) {
 	metrics := []pclient.MetricData{}
 
-	m1 := NewIstioMetricData()
+	m1 := newIstioMetricData()
 	m1.Labels["destination_uid"] = "uid1"
 	metrics = append(metrics, m1)
 
-	m2 := NewIstioMetricData()
+	m2 := newIstioMetricData()
 	m2.Labels["destination_uid"] = "uid2"
 	metrics = append(metrics, m2)
 
 	for i, m := range metrics {
-		mdat, ok := m.(*IstioMetricData)
+		mdat, ok := m.(*istioMetricData)
 		if !ok {
 			t.Errorf("Type Assertion failed.")
 		}
@@ -127,7 +127,7 @@ func Test_ConvertSVCUID_Fail(t *testing.T) {
 }
 
 func TestParseIP(t *testing.T) {
-	d := NewIstioMetricData()
+	d := newIstioMetricData()
 
 	raw := "[0 0 0 0 0 0 0 0 0 0 255 255 10 2 1 84]"
 	expected := "10.2.1.84"

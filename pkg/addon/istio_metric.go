@@ -36,15 +36,15 @@ const (
 
 type IstioEntityGetter struct {
 	name  string
-	query *IstioQuery
+	query *istioQuery
 	etype int //Pod(Application), or Service
 }
 
-func NewIstioEntityGetter(name string) *IstioEntityGetter {
+func newIstioEntityGetter(name string) *IstioEntityGetter {
 	return &IstioEntityGetter{
 		name:  name,
 		etype: podType,
-		query: NewIstioQuery(),
+		query: newIstioQuery(),
 	}
 }
 
@@ -100,7 +100,7 @@ func (istio *IstioEntityGetter) GetEntityMetric(client *pclient.RestClient) ([]*
 	return result, nil
 }
 
-func (istio *IstioEntityGetter) assignMetric(entity *inter.EntityMetric, metric *IstioMetricData) {
+func (istio *IstioEntityGetter) assignMetric(entity *inter.EntityMetric, metric *istioMetricData) {
 	for k, v := range metric.Labels {
 		entity.SetLabel(k, v)
 	}
@@ -118,7 +118,7 @@ func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.
 	}
 
 	for _, dat := range tpsDat {
-		tps, ok := dat.(*IstioMetricData)
+		tps, ok := dat.(*istioMetricData)
 		if !ok {
 			glog.Errorf("Type assertion failed for TPS: not an IstioMetricData")
 			continue
@@ -133,7 +133,7 @@ func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.
 	}
 
 	for _, dat := range latencyDat {
-		latency, ok := dat.(*IstioMetricData)
+		latency, ok := dat.(*istioMetricData)
 		if !ok {
 			glog.Errorf("Type assertion failed for Latency: not an IstioMetricData")
 			continue
@@ -164,13 +164,13 @@ func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.
 //       1: pod.latency
 //       2: service.request-per-second
 //       3: service.latency
-type IstioQuery struct {
+type istioQuery struct {
 	qtype    int
 	queryMap map[int]string
 }
 
 // IstioMetricData : hold the result of Istio-Prometheus data
-type IstioMetricData struct {
+type istioMetricData struct {
 	Labels map[string]string `json:"labels"`
 	Value  float64           `json:"value"`
 	uuid   string
@@ -178,8 +178,8 @@ type IstioMetricData struct {
 }
 
 // NewIstioQuery : create a new IstioQuery
-func NewIstioQuery() *IstioQuery {
-	q := &IstioQuery{
+func newIstioQuery() *istioQuery {
+	q := &istioQuery{
 		qtype:    0,
 		queryMap: make(map[int]string),
 	}
@@ -194,7 +194,7 @@ func NewIstioQuery() *IstioQuery {
 	return q
 }
 
-func (q *IstioQuery) SetQueryType(t int) error {
+func (q *istioQuery) SetQueryType(t int) error {
 	if t < 0 {
 		err := fmt.Errorf("Invalid query type: %d, vs 0|1|2|3", t)
 		glog.Error(err)
@@ -212,16 +212,16 @@ func (q *IstioQuery) SetQueryType(t int) error {
 	return nil
 }
 
-func (q *IstioQuery) GetQueryType() int {
+func (q *istioQuery) GetQueryType() int {
 	return q.qtype
 }
 
-func (q *IstioQuery) GetQuery() string {
+func (q *istioQuery) GetQuery() string {
 	return q.queryMap[q.qtype]
 }
 
-func (q *IstioQuery) Parse(m *pclient.RawMetric) (pclient.MetricData, error) {
-	d := NewIstioMetricData()
+func (q *istioQuery) Parse(m *pclient.RawMetric) (pclient.MetricData, error) {
+	d := newIstioMetricData()
 	d.SetType(q.qtype)
 	if err := d.Parse(m); err != nil {
 		glog.Errorf("Failed to parse metrics: %s", err)
@@ -231,7 +231,7 @@ func (q *IstioQuery) Parse(m *pclient.RawMetric) (pclient.MetricData, error) {
 	return d, nil
 }
 
-func (q *IstioQuery) String() string {
+func (q *istioQuery) String() string {
 	var buffer bytes.Buffer
 
 	for k, v := range q.queryMap {
@@ -242,13 +242,13 @@ func (q *IstioQuery) String() string {
 	return buffer.String()
 }
 
-func NewIstioMetricData() *IstioMetricData {
-	return &IstioMetricData{
+func newIstioMetricData() *istioMetricData {
+	return &istioMetricData{
 		Labels: make(map[string]string),
 	}
 }
 
-func (d *IstioMetricData) Parse(m *pclient.RawMetric) error {
+func (d *istioMetricData) Parse(m *pclient.RawMetric) error {
 	d.Value = float64(m.Value.Value)
 	if math.IsNaN(d.Value) {
 		return fmt.Errorf("Failed to convert value: NaN")
@@ -289,7 +289,7 @@ func (d *IstioMetricData) Parse(m *pclient.RawMetric) error {
 	return nil
 }
 
-func (d *IstioMetricData) parseUID(muid string) (string, error) {
+func (d *istioMetricData) parseUID(muid string) (string, error) {
 	if d.dtype < 2 {
 		return convertPodUID(muid)
 	}
@@ -299,7 +299,7 @@ func (d *IstioMetricData) parseUID(muid string) (string, error) {
 
 // input: [0 0 0 0 0 0 0 0 0 0 255 255 10 2 1 84]
 // output: 10.2.1.84
-func (d *IstioMetricData) parseIP(raw string) (string, error) {
+func (d *istioMetricData) parseIP(raw string) (string, error) {
 	raw = strings.TrimSpace(raw)
 	if len(raw) < 7 {
 		return "", fmt.Errorf("Illegal string")
@@ -313,19 +313,19 @@ func (d *IstioMetricData) parseIP(raw string) (string, error) {
 	return result, nil
 }
 
-func (d *IstioMetricData) SetType(t int) {
+func (d *istioMetricData) SetType(t int) {
 	d.dtype = t
 }
 
-func (d *IstioMetricData) GetEntityID() string {
+func (d *istioMetricData) GetEntityID() string {
 	return d.uuid
 }
 
-func (d *IstioMetricData) GetValue() float64 {
+func (d *istioMetricData) GetValue() float64 {
 	return d.Value
 }
 
-func (d *IstioMetricData) String() string {
+func (d *istioMetricData) String() string {
 	var buffer bytes.Buffer
 
 	uid := d.GetEntityID()

@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"appMetric/pkg/prometheus"
+	"appMetric/pkg/alligator"
 	"appMetric/pkg/util"
 )
 
