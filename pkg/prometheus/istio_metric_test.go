@@ -2,7 +2,7 @@ package prometheus
 
 import (
 	"fmt"
-	pclient "github.com/songbinliu/client_prometheus/pkg/prometheus"
+	pclient "github.com/songbinliu/xfire/pkg/prometheus"
 	"strings"
 	"testing"
 )

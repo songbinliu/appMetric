@@ -1,6 +1,6 @@
-package: github.com/appMetric
+package: appMetric
 import:
 - package: github.com/prometheus/common/model
   version: 2e54d0b93cba2fd133edc32211dcc32c06ef72ca
-- package: github.com/songbinliu/client_prometheus
-  version: 118d5ef7a0c31fe0a076587f97720b7cd55f50ff
+- package: github.com/songbinliu/xfire
+  version: 7040a79a5b11be249696e8e85ebc92e9e4bdd931

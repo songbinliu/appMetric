@@ -6,7 +6,7 @@ import (
 
 	myp "appMetric/pkg/prometheus"
 	"appMetric/pkg/server"
-	"github.com/songbinliu/client_prometheus/pkg/prometheus"
+	"github.com/songbinliu/xfire/pkg/prometheus"
 )
 
 var (

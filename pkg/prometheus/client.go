@@ -3,7 +3,7 @@ package prometheus
 import (
 	"appMetric/pkg/util"
 	"github.com/golang/glog"
-	"github.com/songbinliu/client_prometheus/pkg/prometheus"
+	"github.com/songbinliu/xfire/pkg/prometheus"
 )
 
 type EntityMetricGetter interface {

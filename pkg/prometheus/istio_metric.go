@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/golang/glog"
-	pclient "github.com/songbinliu/client_prometheus/pkg/prometheus"
+	pclient "github.com/songbinliu/xfire/pkg/prometheus"
 	"math"
 	"strings"
 )
