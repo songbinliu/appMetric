@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/golang/glog"
 
+	"appMetric/pkg/addon"
 	myp "appMetric/pkg/prometheus"
 	"appMetric/pkg/server"
 	"github.com/songbinliu/xfire/pkg/prometheus"
@@ -41,19 +42,19 @@ func main() {
 	parseFlags()
 	pclient, err := prometheus.NewRestClient(prometheusHost)
 	if err != nil {
-		glog.Fatal("Failed to generate client: %v", err)
+		glog.Fatalf("Failed to generate client: %v", err)
 	}
 	//mclient.SetUser("", "")
 	test_prometheus(pclient)
 
-	appGetter := myp.NewIstioEntityGetter("istio.app.metric")
+	appGetter := addon.NewIstioEntityGetter("istio.app.metric")
 	appGetter.SetType(false)
-	redisGetter := myp.NewRedisEntityGetter("redis.app.metric")
+	redisGetter := addon.NewRedisEntityGetter("redis.app.metric")
 	appClient := myp.NewAggregator(pclient)
 	appClient.AddGetter(appGetter)
 	appClient.AddGetter(redisGetter)
 
-	vappGetter := myp.NewIstioEntityGetter("istio.vapp.metric")
+	vappGetter := addon.NewIstioEntityGetter("istio.vapp.metric")
 	vappGetter.SetType(true)
 	vappClient := myp.NewAggregator(pclient)
 	vappClient.AddGetter(vappGetter)

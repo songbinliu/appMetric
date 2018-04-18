@@ -1,4 +1,4 @@
-package prometheus
+package addon
 
 import (
 	"fmt"
