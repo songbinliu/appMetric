@@ -10,7 +10,7 @@ import (
 type EntityMetricGetter interface {
 	GetEntityMetric(client *prometheus.RestClient) ([]*inter.EntityMetric, error)
 	Name() string
-	Category() string
+	//Category() string
 }
 
 // Alligator: aggregates several kinds of Entity metric getters
