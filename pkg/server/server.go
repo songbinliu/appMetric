@@ -16,8 +16,8 @@ type MetricServer struct {
 	ip   string
 	host string
 
-	appClient  *prometheus.Aggregator
-	vappClient *prometheus.Aggregator
+	appClient  *alligator.Alligator
+	vappClient *alligator.Alligator
 }
 
 const (
@@ -26,7 +26,7 @@ const (
 	fakeMetricPath    = "/fake/metrics"
 )
 
-func NewMetricServer(port int, appClient, vappclient *prometheus.Aggregator) *MetricServer {
+func NewMetricServer(port int, appClient, vappclient *alligator.Alligator) *MetricServer {
 	ip, err := util.ExternalIP()
 	if err != nil {
 		glog.Errorf("Failed to get server IP: %v", err)

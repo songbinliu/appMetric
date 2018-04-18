@@ -5,7 +5,7 @@ import (
 	"github.com/golang/glog"
 
 	"appMetric/pkg/addon"
-	myp "appMetric/pkg/prometheus"
+	ali "appMetric/pkg/alligator"
 	"appMetric/pkg/server"
 	"github.com/songbinliu/xfire/pkg/prometheus"
 )
@@ -47,16 +47,31 @@ func main() {
 	//mclient.SetUser("", "")
 	test_prometheus(pclient)
 
-	appGetter := addon.NewIstioEntityGetter("istio.app.metric")
-	appGetter.SetType(false)
-	redisGetter := addon.NewRedisEntityGetter("redis.app.metric")
-	appClient := myp.NewAggregator(pclient)
-	appClient.AddGetter(appGetter)
+	factory := addon.NewGetterFactory()
+
+	//1. Application Metrics
+	appClient := ali.NewAlligator(pclient)
+	istioGetter, err := factory.CreateEntityGetter(addon.IstioGetterCategory, "istio.app.metric")
+	if err != nil {
+		glog.Errorf("Failed to create Istio App getter: %v", err)
+		return
+	}
+	appClient.AddGetter(istioGetter)
+
+	redisGetter, err := factory.CreateEntityGetter(addon.RedisGetterCategory, "redis.app.metric")
+	if err != nil {
+		glog.Errorf("Failed to create Redis App getter: %v", err)
+		return
+	}
 	appClient.AddGetter(redisGetter)
 
-	vappGetter := addon.NewIstioEntityGetter("istio.vapp.metric")
-	vappGetter.SetType(true)
-	vappClient := myp.NewAggregator(pclient)
+	//2. Virtual Application Metrics
+	vappClient := ali.NewAlligator(pclient)
+	vappGetter, err := factory.CreateEntityGetter(addon.IstioVAppGetterCategory, "istio.vapp.metric")
+	if err != nil {
+		glog.Errorf("Failed to create Istio VApp getter: %v", err)
+		return
+	}
 	vappClient.AddGetter(vappGetter)
 
 	s := server.NewMetricServer(port, appClient, vappClient)

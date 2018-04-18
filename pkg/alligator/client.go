@@ -1,4 +1,4 @@
-package prometheus
+package alligator
 
 import (
 	"github.com/golang/glog"
@@ -13,13 +13,14 @@ type EntityMetricGetter interface {
 	Category() string
 }
 
-type Aggregator struct {
+// Alligator: aggregates several kinds of Entity metric getters
+type Alligator struct {
 	pclient *prometheus.RestClient
 	Getters map[string]EntityMetricGetter
 }
 
-func NewAggregator(pclient *prometheus.RestClient) *Aggregator {
-	result := &Aggregator{
+func NewAlligator(pclient *prometheus.RestClient) *Alligator {
+	result := &Alligator{
 		pclient: pclient,
 		Getters: make(map[string]EntityMetricGetter),
 	}
@@ -27,7 +28,7 @@ func NewAggregator(pclient *prometheus.RestClient) *Aggregator {
 	return result
 }
 
-func (c *Aggregator) AddGetter(getter EntityMetricGetter) bool {
+func (c *Alligator) AddGetter(getter EntityMetricGetter) bool {
 	name := getter.Name()
 	if _, exist := c.Getters[name]; exist {
 		glog.Errorf("Entity Metric Getter: %v already exists", name)
@@ -38,7 +39,7 @@ func (c *Aggregator) AddGetter(getter EntityMetricGetter) bool {
 	return true
 }
 
-func (c *Aggregator) GetEntityMetrics() ([]*inter.EntityMetric, error) {
+func (c *Alligator) GetEntityMetrics() ([]*inter.EntityMetric, error) {
 	result := []*inter.EntityMetric{}
 	for _, getter := range c.Getters {
 		dat, err := getter.GetEntityMetric(c.pclient)
