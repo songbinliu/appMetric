@@ -48,8 +48,10 @@ func main() {
 
 	appGetter := myp.NewIstioEntityGetter("istio.app.metric")
 	appGetter.SetType(false)
+	redisGetter := myp.NewRedisEntityGetter("redis.app.metric")
 	appClient := myp.NewAggregator(pclient)
 	appClient.AddGetter(appGetter)
+	appClient.AddGetter(redisGetter)
 
 	vappGetter := myp.NewIstioEntityGetter("istio.vapp.metric")
 	vappGetter.SetType(true)

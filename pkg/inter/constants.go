@@ -11,6 +11,8 @@ const (
 	Latency = "latency"
 
 	//Labels
-	IP   = "ip"
-	Name = "name"
+	IP       = "ip"
+	Port     = "port"
+	Name     = "name"
+	Category = "entity.category"
 )

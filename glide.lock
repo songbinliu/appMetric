@@ -1,5 +1,5 @@
-hash: 9015e0bc5dd4b4fb0ca2b464afb50c69c4892eba87cd96b85cfdeb929d19bbfc
-updated: 2018-04-18T11:45:16.489266-04:00
+hash: 49c04a844810aaacf17788b1aae9311707aba1f244a0a2e91037da900cd737db
+updated: 2018-04-18T14:35:18.574268-04:00
 imports:
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
@@ -8,7 +8,7 @@ imports:
   subpackages:
   - model
 - name: github.com/songbinliu/xfire
-  version: 811f0d9da2377ab7b38076cf62e79a965b569838
+  version: 58e7ef2540f9d39a48270399da1516a00674edf9
   subpackages:
   - pkg/prometheus
 testImports: []
