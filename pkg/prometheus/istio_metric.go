@@ -62,10 +62,10 @@ func (istio *IstioEntityGetter) SetType(isVirtualApp bool) {
 
 func (istio *IstioEntityGetter) Category() string {
 	if istio.etype == podType {
-		return "Istio.Application"
+		return "Istio"
 	}
 
-	return "Istio.VirtualApplication"
+	return "Istio.VApp"
 }
 
 func (istio *IstioEntityGetter) GetEntityMetric(client *pclient.RestClient) ([]*inter.EntityMetric, error) {

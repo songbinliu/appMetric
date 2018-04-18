@@ -14,5 +14,5 @@ const (
 	IP       = "ip"
 	Port     = "port"
 	Name     = "name"
-	Category = "entity.category"
+	Category = "category"
 )

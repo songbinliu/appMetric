@@ -33,7 +33,7 @@ func (r *RedisEntityGetter) Name() string {
 }
 
 func (r *RedisEntityGetter) Category() string {
-	return "Redis.Application"
+	return "Redis"
 }
 
 func (r *RedisEntityGetter) GetEntityMetric(client *xfire.RestClient) ([]*inter.EntityMetric, error) {
