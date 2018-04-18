@@ -106,7 +106,7 @@ func (istio *IstioEntityGetter) assignMetric(entity *inter.EntityMetric, metric 
 	}
 
 	//2. other information
-	entity.SetLabel("metric.category", istio.Category())
+	entity.SetLabel(inter.Category, istio.Category())
 }
 
 func (istio *IstioEntityGetter) mergeTPSandLatency(tpsDat, latencyDat []pclient.MetricData) []*inter.EntityMetric {
