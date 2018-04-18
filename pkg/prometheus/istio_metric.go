@@ -335,34 +335,6 @@ func (d *IstioMetricData) String() string {
 	return buffer.String()
 }
 
-// GetIstioMetric :
-//   An example to get the 4 kinds of metrics from Istio-Prometheus
-func GetIstioMetric(client *pclient.RestClient) {
-	q := NewIstioQuery()
-
-	for i := 0; i < 4; i++ {
-		q.SetQueryType(i)
-		result, err := client.GetMetrics(q)
-		if err != nil {
-			glog.Errorf("Failed to get metric: %v", err)
-		}
-
-		msg := "Pod QPS"
-		if i == 1 {
-			msg = "Pod Latency"
-		} else if i == 2 {
-			msg = "Service QPS"
-		} else if i == 3 {
-			msg = "Service Latency"
-		}
-
-		glog.V(2).Infof("====== %v =========", msg)
-		for i := range result {
-			glog.V(2).Infof("\t[%d] %v", i, result[i])
-		}
-	}
-}
-
 func getLatencyExp(pod bool) string {
 	name_sum := ""
 	name_count := ""
