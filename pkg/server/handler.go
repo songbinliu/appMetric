@@ -198,3 +198,35 @@ func (s *MetricServer) handleServiceMetric(w http.ResponseWriter, r *http.Reques
 	//2. put metrics to response
 	s.sendMetrics(metrics, w, r)
 }
+
+func (s *MetricServer) handleFakeMetric(w http.ResponseWriter, r *http.Request) {
+	//1. generate fake app metrics
+	metrics := generateFakeMetrics()
+	//2. put metrics to response
+	s.sendMetrics(metrics, w, r)
+	glog.V(3).Infof("fake metric service finish: %d", len(metrics))
+}
+
+func generateFakeMetrics() []*util.EntityMetric {
+	result := []*util.EntityMetric{}
+
+	ip1 := "10.0.2.3"
+	em := util.NewEntityMetric(ip1, util.ApplicationType)
+	em.SetLabel("name", "default/curl-1xfj")
+	em.SetLabel("ip", ip1)
+
+	em.SetMetric(util.Latency, 133.2)
+	em.SetMetric(util.TPS, 12)
+	result = append(result, em)
+
+	ip2 := "10.0.3.2"
+	em2 := util.NewEntityMetric(ip2, util.ApplicationType)
+	em2.SetLabel("name", "istio/music-ftaf2")
+	em2.SetLabel("ip", ip2)
+
+	em2.SetMetric(util.Latency, 13.2)
+	em2.SetMetric(util.TPS, 10)
+	result = append(result, em2)
+
+	return result
+}

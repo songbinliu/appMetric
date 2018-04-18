@@ -23,6 +23,7 @@ type MetricServer struct {
 const (
 	appMetricPath     = "/pod/metrics"
 	serviceMetricPath = "/service/metrics"
+	fakeMetricPath    = "/fake/metrics"
 )
 
 func NewMetricServer(port int, appClient, vappclient *prometheus.Aggregator) *MetricServer {
@@ -74,6 +75,11 @@ func (s *MetricServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if strings.EqualFold(path, serviceMetricPath) {
 		s.handleServiceMetric(w, r)
+		return
+	}
+
+	if strings.EqualFold(path, fakeMetricPath) {
+		s.handleFakeMetric(w, r)
 		return
 	}
 
