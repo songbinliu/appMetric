@@ -99,7 +99,7 @@ metadata:
 spec:
   match: context.protocol == "http"
   actions:
-  - handler: turbohandler.prometheus
+  - handler: turbohandler.prometheus.default
     instances:
     - turbosvclatency.metric.default
     - turbosvcrequestcount.metric.default
