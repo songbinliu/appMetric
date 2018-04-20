@@ -107,7 +107,7 @@ make build
 
 Then the server will serve on port `8081`; access the REST API by:
 ```console
-curl http://localhost:8081/service/metrics
+curl http://localhost:8081/pod/metrics
 ```
 ```json
 {"status":0,"message:omitemtpy":"Success","data:omitempty":[{"uid":"10.0.2.3","type":1,"labels":{"ip":"10.0.2.3","name":"default/curl-1xfj"},"metrics":{"latency":133.2,"tps":12}},{"uid":"10.0.3.2","type":1,"labels":{"ip":"10.0.3.2","name":"istio/music-ftaf2"},"metrics":{"latency":13.2,"tps":10}}]}
