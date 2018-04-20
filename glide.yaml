@@ -3,4 +3,4 @@ import:
 - package: github.com/prometheus/common/model
   version: 2e54d0b93cba2fd133edc32211dcc32c06ef72ca
 - package: github.com/songbinliu/xfire/pkg/prometheus
-  version: 58e7ef2540f9d39a48270399da1516a00674edf9
+  version: 1667ae6ade0c27b7c30c514574b9bd3e886b5258

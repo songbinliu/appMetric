@@ -297,16 +297,32 @@ func (d *istioMetricData) parseUID(muid string) (string, error) {
 	return convertSVCUID(muid)
 }
 
-// input: [0 0 0 0 0 0 0 0 0 0 255 255 10 2 1 84]
-// output: 10.2.1.84
 func (d *istioMetricData) parseIP(raw string) (string, error) {
 	raw = strings.TrimSpace(raw)
+	if strings.Contains(raw, "[") {
+		return d.parseV04IP(raw)
+	}
+
+	if len(raw) < 1 {
+		return "", fmt.Errorf("IP is empty: %v", raw)
+	}
+
+	return raw, nil
+}
+
+// input: [0 0 0 0 0 0 0 0 0 0 255 255 10 2 1 84]
+// output: 10.2.1.84
+func (d *istioMetricData) parseV04IP(raw string) (string, error) {
 	if len(raw) < 7 {
 		return "", fmt.Errorf("Illegal string")
 	}
 
 	content := raw[1 : len(raw)-1]
 	items := strings.Split(content, " ")
+	if len(items) < 4 {
+		return "", fmt.Errorf("Illegal IP string: %v", raw)
+	}
+
 	i := len(items) - 4
 
 	result := fmt.Sprintf("%v.%v.%v.%v", items[i], items[i+1], items[i+2], items[i+3])
