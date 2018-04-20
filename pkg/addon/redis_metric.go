@@ -1,6 +1,7 @@
 package addon
 
 import (
+	"appMetric/pkg/alligator"
 	"appMetric/pkg/inter"
 	"fmt"
 	"github.com/golang/glog"
@@ -20,6 +21,9 @@ type RedisEntityGetter struct {
 	name  string
 	query *redisQuery
 }
+
+// ensure RedisEntityGetter implement the requisite interfaces
+var _ alligator.EntityMetricGetter = &RedisEntityGetter{}
 
 func NewRedisEntityGetter(name string) *RedisEntityGetter {
 	return &RedisEntityGetter{

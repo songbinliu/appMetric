@@ -1,6 +1,7 @@
 package addon
 
 import (
+	"appMetric/pkg/alligator"
 	"appMetric/pkg/inter"
 	"bytes"
 	"fmt"
@@ -39,6 +40,9 @@ type IstioEntityGetter struct {
 	query *istioQuery
 	etype int //Pod(Application), or Service
 }
+
+// ensure RedisEntityGetter implement the requisite interfaces
+var _ alligator.EntityMetricGetter = &IstioEntityGetter{}
 
 func newIstioEntityGetter(name string) *IstioEntityGetter {
 	return &IstioEntityGetter{
