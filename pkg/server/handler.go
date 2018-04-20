@@ -180,7 +180,7 @@ func (s *MetricServer) handleAppMetric(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	glog.V(3).Infof("App metrics: %+v", metrics)
+	glog.V(3).Infof("App metrics num: %v", len(metrics))
 
 	//2. put metrics to response
 	s.sendMetrics(metrics, w, r)
