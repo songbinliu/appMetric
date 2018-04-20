@@ -101,8 +101,8 @@ spec:
   actions:
   - handler: turbohandler.prometheus
     instances:
-    - turbosvclatency.metric
-    - turbosvcrequestcount.metric
-    - turbopodlatency.metric
-    - turbopodrequestcount.metric
+    - turbosvclatency.metric.default
+    - turbosvcrequestcount.metric.default
+    - turbopodlatency.metric.default
+    - turbopodrequestcount.metric.default
 ---
