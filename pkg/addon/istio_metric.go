@@ -41,7 +41,7 @@ type IstioEntityGetter struct {
 	etype int //Pod(Application), or Service
 }
 
-// ensure RedisEntityGetter implement the requisite interfaces
+// ensure IstioEntityGetter implement the requisite interfaces
 var _ alligator.EntityMetricGetter = &IstioEntityGetter{}
 
 func newIstioEntityGetter(name string) *IstioEntityGetter {
