@@ -7,23 +7,26 @@ import (
 	"os"
 	"strings"
 
-	"appMetric/pkg/prometheus"
+	"appMetric/pkg/alligator"
 	"appMetric/pkg/util"
 )
 
 type MetricServer struct {
-	port       int
-	ip         string
-	host       string
-	promClient *prometheus.MetricRestClient
+	port int
+	ip   string
+	host string
+
+	appClient  *alligator.Alligator
+	vappClient *alligator.Alligator
 }
 
 const (
-	podMetricPath     = "/pod/metrics"
+	appMetricPath     = "/pod/metrics"
 	serviceMetricPath = "/service/metrics"
+	fakeMetricPath    = "/fake/metrics"
 )
 
-func NewMetricServer(port int, pclient *prometheus.MetricRestClient) *MetricServer {
+func NewMetricServer(port int, appClient, vappclient *alligator.Alligator) *MetricServer {
 	ip, err := util.ExternalIP()
 	if err != nil {
 		glog.Errorf("Failed to get server IP: %v", err)
@@ -41,7 +44,8 @@ func NewMetricServer(port int, pclient *prometheus.MetricRestClient) *MetricServ
 		port:       port,
 		ip:         ip,
 		host:       host,
-		promClient: pclient,
+		appClient:  appClient,
+		vappClient: vappclient,
 	}
 }
 
@@ -64,8 +68,8 @@ func (s *MetricServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.EqualFold(path, podMetricPath) {
-		s.handlePodMetric(w, r)
+	if strings.EqualFold(path, appMetricPath) {
+		s.handleAppMetric(w, r)
 		return
 	}
 
@@ -74,8 +78,13 @@ func (s *MetricServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//if strings.EqualFold(path, "/metrics") {
-	//	s.handleMetrics(w, r)
+	if strings.EqualFold(path, fakeMetricPath) {
+		s.handleFakeMetric(w, r)
+		return
+	}
+
+	//if strings.EqualFold(path, "/health") {
+	//	s.handleHealth(w, r)
 	//}
 
 	s.handleWelcome(path, w, r)

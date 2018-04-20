@@ -4,8 +4,10 @@ import (
 	"flag"
 	"github.com/golang/glog"
 
-	"appMetric/pkg/prometheus"
+	"appMetric/pkg/addon"
+	ali "appMetric/pkg/alligator"
 	"appMetric/pkg/server"
+	"github.com/songbinliu/xfire/pkg/prometheus"
 )
 
 var (
@@ -20,7 +22,7 @@ func parseFlags() {
 	flag.Parse()
 }
 
-func getJobs(mclient *prometheus.MetricRestClient) {
+func getJobs(mclient *prometheus.RestClient) {
 	msg, err := mclient.GetJobs()
 	if err != nil {
 		glog.Errorf("Failed to get jobs: %v", err)
@@ -29,29 +31,50 @@ func getJobs(mclient *prometheus.MetricRestClient) {
 	glog.V(1).Infof("jobs: %v", msg)
 }
 
-func test_prometheus(mclient *prometheus.MetricRestClient) {
+func test_prometheus(mclient *prometheus.RestClient) {
 	glog.V(2).Infof("Begin to test prometheus client...")
 	getJobs(mclient)
-	mset, err := mclient.GetPodMetrics()
-	if err != nil {
-		glog.Errorf("Failed to get pod metrics: %v", err)
-		return
-	}
-
-	glog.V(2).Infof("%v", mset.String())
 	glog.V(2).Infof("End of testing prometheus client.")
 	return
 }
 
 func main() {
 	parseFlags()
-	mclient, err := prometheus.NewRestClient(prometheusHost)
+	pclient, err := prometheus.NewRestClient(prometheusHost)
 	if err != nil {
-		glog.Fatal("Failed to generate client: %v", err)
+		glog.Fatalf("Failed to generate client: %v", err)
 	}
-	test_prometheus(mclient)
+	//mclient.SetUser("", "")
+	test_prometheus(pclient)
 
-	s := server.NewMetricServer(port, mclient)
+	factory := addon.NewGetterFactory()
+
+	//1. Application Metrics
+	appClient := ali.NewAlligator(pclient)
+	istioGetter, err := factory.CreateEntityGetter(addon.IstioGetterCategory, "istio.app.metric")
+	if err != nil {
+		glog.Errorf("Failed to create Istio App getter: %v", err)
+		return
+	}
+	appClient.AddGetter(istioGetter)
+
+	redisGetter, err := factory.CreateEntityGetter(addon.RedisGetterCategory, "redis.app.metric")
+	if err != nil {
+		glog.Errorf("Failed to create Redis App getter: %v", err)
+		return
+	}
+	appClient.AddGetter(redisGetter)
+
+	//2. Virtual Application Metrics
+	vappClient := ali.NewAlligator(pclient)
+	vappGetter, err := factory.CreateEntityGetter(addon.IstioVAppGetterCategory, "istio.vapp.metric")
+	if err != nil {
+		glog.Errorf("Failed to create Istio VApp getter: %v", err)
+		return
+	}
+	vappClient.AddGetter(vappGetter)
+
+	s := server.NewMetricServer(port, appClient, vappClient)
 	s.Run()
 	return
 }
