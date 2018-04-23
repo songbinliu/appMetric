@@ -1,7 +1,7 @@
 package inter
 
 type EntityMetric struct {
-	UID     string             `json:"uid,omitempty"`
+	UID     string             `json:"uid"`
 	Type    int32              `json:"type,omitempty"`
 	Labels  map[string]string  `json:"labels,omitempty"`
 	Metrics map[string]float64 `json:"metrics,omitempty"`

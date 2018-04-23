@@ -23,7 +23,7 @@ spec:
         app: appmetric
     spec:
       containers:
-      - image: docker.io/beekman9527/appmetric:latest
+      - image: docker.io/beekman9527/appmetric:v2
         imagePullPolicy: Always
         name: appmetric
         args:
