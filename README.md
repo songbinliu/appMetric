@@ -121,7 +121,7 @@ curl http://localhost:8081/pod/metrics
 ```
 
 #### Deploy it in Kubernetes
-Alternately, this REST API service can also be deployed in Kubernetes:
+This REST API service can also be deployed in Kubernetes:
 ```console
 kubectl create -f scripts/k8s/deploy.yaml
 
