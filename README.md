@@ -65,7 +65,7 @@ The application metrics are served via REST API. Access endpoint `/pod/metrics`,
 The output json format is defined as:
 ```golang
 type EntityMetric struct {
-	UID     string             `json:"uid,omitempty"`
+	UID     string             `json:"uid"`
 	Type    int32              `json:"type,omitempty"`
 	Labels  map[string]string  `json:"labels,omitempty"`
 	Metrics map[string]float64 `json:"metrics,omitempty"`
@@ -99,6 +99,8 @@ istioctl create -f scripts/istio/ip.turbo.metric.yaml
 **One Rule**: Only the `http` based metrics will be handled by the defined handler.
 
 ## Run REST API Server
+
+#### Run in terminal
 build and run this go application:
 ```console
 make build
@@ -113,6 +115,12 @@ curl http://localhost:8081/pod/metrics
 {"status":0,"message:omitemtpy":"Success","data:omitempty":[{"uid":"10.0.2.3","type":1,"labels":{"ip":"10.0.2.3","name":"default/curl-1xfj"},"metrics":{"latency":133.2,"tps":12}},{"uid":"10.0.3.2","type":1,"labels":{"ip":"10.0.3.2","name":"istio/music-ftaf2"},"metrics":{"latency":13.2,"tps":10}}]}
 ```
 
+#### Run in docker container
+```console
+ docker run -d -p 18081:8081 beekman9527/appmetric:v2 --promUrl=http://10.10.200.34:9090 --v=3 --logtostderr
+```
+
+#### Deploy it in Kubernetes
 Alternately, this REST API service can also be deployed in Kubernetes:
 ```console
 kubectl create -f scripts/k8s/deploy.yaml
