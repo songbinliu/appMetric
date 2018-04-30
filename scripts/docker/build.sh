@@ -1,6 +1,6 @@
 #!/bin/bash
 
-tag=beekman9527/appmetric:v2
+tag=beekman9527/appmetric:v2.0
 
 make product
 ret=$?
